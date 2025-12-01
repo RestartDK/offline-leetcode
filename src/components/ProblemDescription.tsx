@@ -14,14 +14,6 @@ const difficultyColors = {
 export function ProblemDescription({ problem }: ProblemDescriptionProps) {
   return (
     <div className="h-full flex flex-col bg-lc-fill-2">
-      {/* Tabs */}
-      <div className="flex border-b border-lc-border">
-        <button className="tab active">Description</button>
-        <button className="tab">Editorial</button>
-        <button className="tab">Solutions</button>
-        <button className="tab">Submissions</button>
-      </div>
-
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-6">
         {/* Title and difficulty */}

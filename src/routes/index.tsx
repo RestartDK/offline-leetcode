@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { ProblemTable } from '../components/ProblemTable';
-import { getProblems } from '../lib/storage';
+import { getProblems, loadProblems } from '../lib/storage';
 import { Problem } from '../data/problems';
 
 export const Route = createFileRoute('/')({ component: HomePage });
@@ -10,7 +10,11 @@ function HomePage() {
   const [problems, setProblems] = useState<Problem[]>([]);
 
   useEffect(() => {
-    setProblems(getProblems());
+    // Load problems from JSON file
+    loadProblems().then(setProblems).catch(() => {
+      // Fallback to synchronous getter if async load fails
+      setProblems(getProblems());
+    });
   }, []);
 
   return (

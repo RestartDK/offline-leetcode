@@ -1,9 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
-import { Moon, Sun, Type, Code, Columns, Download, Upload, Trash2, RotateCcw } from 'lucide-react';
-import { Settings, getSettings, saveSettings, resetSettings, getProblems, saveProblems } from '../lib/storage';
+import { Sun, Type, Code, Columns, Download, Upload, Trash2, RotateCcw } from 'lucide-react';
+import { Settings, getSettings, saveSettings, resetSettings, getProblems, saveProblems, loadProblems, downloadProblemsJSON } from '../lib/storage';
 import { sampleProblems } from '../data/problems';
 import { ImportModal } from '../components/ImportModal';
+import { themes, applyTheme, ThemeName } from '../lib/themes';
 
 export const Route = createFileRoute('/settings')({ component: SettingsPage });
 
@@ -14,7 +15,12 @@ function SettingsPage() {
 
   useEffect(() => {
     setSettings(getSettings());
-    setProblemCount(getProblems().length);
+    // Load problems from JSON to get accurate count
+    loadProblems().then(problems => {
+      setProblemCount(problems.length);
+    }).catch(() => {
+      setProblemCount(getProblems().length);
+    });
   }, []);
 
   const handleSettingChange = <K extends keyof Settings>(key: K, value: Settings[K]) => {
@@ -23,6 +29,13 @@ function SettingsPage() {
     const newSettings = { ...settings, [key]: value };
     setSettings(newSettings);
     saveSettings(newSettings);
+    
+    // Apply theme immediately if theme changed
+    if (key === 'theme') {
+      applyTheme(value as ThemeName);
+      // Dispatch custom event for same-tab updates
+      window.dispatchEvent(new Event('theme-changed'));
+    }
   };
 
   const handleResetSettings = () => {
@@ -36,6 +49,10 @@ function SettingsPage() {
     if (confirm('Reset to sample problems? This will remove all imported problems.')) {
       saveProblems(sampleProblems);
       setProblemCount(sampleProblems.length);
+      // Reload to update cache
+      loadProblems().then(problems => {
+        setProblemCount(problems.length);
+      });
     }
   };
 
@@ -68,36 +85,38 @@ function SettingsPage() {
               Appearance
             </h2>
 
-            {/* Theme */}
+            {/* Theme Selector */}
             <div className="mb-6">
               <label className="block text-sm text-gray-400 mb-3">Theme</label>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => handleSettingChange('theme', 'dark')}
-                  className={`flex items-center gap-2 px-4 py-3 rounded-lg border transition-colors ${
-                    settings.theme === 'dark'
-                      ? 'bg-lc-accent/10 border-lc-accent text-lc-accent'
-                      : 'bg-lc-fill-3 border-lc-border text-gray-400 hover:text-gray-200'
-                  }`}
-                >
-                  <Moon className="w-5 h-5" />
-                  <span>Dark</span>
-                </button>
-                <button
-                  onClick={() => handleSettingChange('theme', 'light')}
-                  className={`flex items-center gap-2 px-4 py-3 rounded-lg border transition-colors ${
-                    settings.theme === 'light'
-                      ? 'bg-lc-accent/10 border-lc-accent text-lc-accent'
-                      : 'bg-lc-fill-3 border-lc-border text-gray-400 hover:text-gray-200'
-                  }`}
-                >
-                  <Sun className="w-5 h-5" />
-                  <span>Light</span>
-                </button>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                {Object.values(themes).map((theme) => (
+                  <button
+                    key={theme.name}
+                    onClick={() => handleSettingChange('theme', theme.name)}
+                    className={`px-4 py-3 rounded-lg border transition-colors text-left ${
+                      settings.theme === theme.name
+                        ? 'bg-lc-accent/10 border-lc-accent text-lc-accent'
+                        : 'bg-lc-fill-3 border-lc-border text-gray-400 hover:text-gray-200 hover:border-lc-accent/50'
+                    }`}
+                  >
+                    <div className="font-medium">{theme.displayName}</div>
+                    <div className="flex gap-1 mt-2">
+                      <div 
+                        className="w-3 h-3 rounded-full" 
+                        style={{ backgroundColor: theme.colors['lc-bg-2'] }}
+                      />
+                      <div 
+                        className="w-3 h-3 rounded-full" 
+                        style={{ backgroundColor: theme.colors['lc-accent'] }}
+                      />
+                      <div 
+                        className="w-3 h-3 rounded-full" 
+                        style={{ backgroundColor: theme.colors['lc-easy'] }}
+                      />
+                    </div>
+                  </button>
+                ))}
               </div>
-              <p className="mt-2 text-xs text-gray-500">
-                Note: Light theme is not fully implemented yet.
-              </p>
             </div>
 
             {/* Font Size */}
@@ -204,6 +223,14 @@ function SettingsPage() {
               </button>
 
               <button
+                onClick={downloadProblemsJSON}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-lc-fill-3 text-gray-200 rounded-lg font-medium hover:bg-lc-fill-4 border border-lc-border transition-colors"
+              >
+                <Download className="w-5 h-5" />
+                Download problems.json
+              </button>
+
+              <button
                 onClick={handleResetProblems}
                 className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-lc-fill-3 text-gray-200 rounded-lg font-medium hover:bg-lc-fill-4 border border-lc-border transition-colors"
               >
@@ -211,6 +238,11 @@ function SettingsPage() {
                 Reset to Sample Problems
               </button>
             </div>
+            
+            <p className="mt-4 text-xs text-gray-500">
+              Problems are loaded from <code className="text-gray-400">/problems.json</code>. 
+              When you import or modify problems, click "Download problems.json" to save your changes to a file.
+            </p>
           </section>
 
           {/* Danger Zone */}
@@ -261,7 +293,13 @@ function SettingsPage() {
       <ImportModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
-        onImportSuccess={() => setProblemCount(getProblems().length)}
+        onImportSuccess={() => {
+          loadProblems().then(problems => {
+            setProblemCount(problems.length);
+          }).catch(() => {
+            setProblemCount(getProblems().length);
+          });
+        }}
       />
     </div>
   );

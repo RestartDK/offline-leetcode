@@ -1,6 +1,9 @@
 import { HeadContent, Scripts, createRootRoute, Outlet } from '@tanstack/react-router';
+import { useEffect } from 'react';
 
 import Header from '../components/Header';
+import { getSettings } from '../lib/storage';
+import { applyTheme } from '../lib/themes';
 
 import appCss from '../styles.css?url';
 
@@ -46,6 +49,35 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    // Apply theme on mount
+    const settings = getSettings();
+    applyTheme(settings.theme);
+
+    // Listen for storage changes to update theme (cross-tab)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'leetcode-offline-settings') {
+        const settings = getSettings();
+        applyTheme(settings.theme);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also listen for custom event for same-tab updates
+    const handleThemeChange = () => {
+      const settings = getSettings();
+      applyTheme(settings.theme);
+    };
+    
+    window.addEventListener('theme-changed', handleThemeChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('theme-changed', handleThemeChange);
+    };
+  }, []);
+
   return (
     <html lang="en" className="dark">
       <head>

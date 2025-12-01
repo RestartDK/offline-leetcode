@@ -1,52 +1,136 @@
-// localStorage utilities for problems and settings
+// Storage utilities - problems in JSON file, solutions/settings in localStorage
 
 import { Problem, UserSolution, sampleProblems } from '../data/problems';
+import { ThemeName } from './themes';
 
 const STORAGE_KEYS = {
-  PROBLEMS: 'leetcode-offline-problems',
   SOLUTIONS: 'leetcode-offline-solutions',
   SETTINGS: 'leetcode-offline-settings',
+  PROBLEMS_CACHE: 'leetcode-offline-problems-cache', // Cache for problems loaded from JSON
 } as const;
 
+const PROBLEMS_JSON_PATH = '/problems.json';
+
+// Cache for problems loaded from JSON file
+let problemsCache: Problem[] | null = null;
+let problemsLoadPromise: Promise<Problem[]> | null = null;
+
 export interface Settings {
-  theme: 'dark' | 'light';
+  theme: ThemeName;
   fontSize: number;
   editorMode: 'normal' | 'vim';
   tabSize: number;
 }
 
 const defaultSettings: Settings = {
-  theme: 'dark',
+  theme: 'default',
   fontSize: 14,
   editorMode: 'normal',
   tabSize: 4,
 };
 
-// Problems storage
+// Problems storage - loads from JSON file
+export async function loadProblems(): Promise<Problem[]> {
+  if (typeof window === 'undefined') return sampleProblems;
+  
+  // Return cached problems if available
+  if (problemsCache) return problemsCache;
+  
+  // Return existing promise if already loading
+  if (problemsLoadPromise) return problemsLoadPromise;
+  
+  // Try to load from cache first (for offline use)
+  const cached = localStorage.getItem(STORAGE_KEYS.PROBLEMS_CACHE);
+  if (cached) {
+    try {
+      problemsCache = JSON.parse(cached) as Problem[];
+      return problemsCache;
+    } catch {
+      // Cache is invalid, continue to load from file
+    }
+  }
+  
+  // Load from JSON file
+  problemsLoadPromise = (async () => {
+    try {
+      const response = await fetch(PROBLEMS_JSON_PATH);
+      if (response.ok) {
+        const problems = await response.json() as Problem[];
+        problemsCache = problems;
+        // Cache for offline use
+        localStorage.setItem(STORAGE_KEYS.PROBLEMS_CACHE, JSON.stringify(problems));
+        return problems;
+      }
+    } catch (error) {
+      console.warn('Failed to load problems.json, using cache or sample problems:', error);
+    }
+    
+    // Fallback to cached or sample problems
+    if (cached) {
+      try {
+        problemsCache = JSON.parse(cached) as Problem[];
+        return problemsCache;
+      } catch {
+        // Cache invalid, use samples
+      }
+    }
+    
+    problemsCache = sampleProblems;
+    return problemsCache;
+  })();
+  
+  return problemsLoadPromise;
+}
+
+// Synchronous getter (uses cache or sample problems as fallback)
 export function getProblems(): Problem[] {
   if (typeof window === 'undefined') return sampleProblems;
   
-  const stored = localStorage.getItem(STORAGE_KEYS.PROBLEMS);
-  if (!stored) {
-    // Initialize with sample problems
-    localStorage.setItem(STORAGE_KEYS.PROBLEMS, JSON.stringify(sampleProblems));
-    return sampleProblems;
+  // Return cache if available
+  if (problemsCache) return problemsCache;
+  
+  // Try to get from localStorage cache
+  const cached = localStorage.getItem(STORAGE_KEYS.PROBLEMS_CACHE);
+  if (cached) {
+    try {
+      problemsCache = JSON.parse(cached) as Problem[];
+      return problemsCache;
+    } catch {
+      // Cache invalid
+    }
   }
   
-  try {
-    return JSON.parse(stored) as Problem[];
-  } catch {
-    return sampleProblems;
-  }
+  // Fallback to sample problems
+  return sampleProblems;
 }
 
+// Save problems - updates cache (doesn't auto-download)
 export function saveProblems(problems: Problem[]): void {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(STORAGE_KEYS.PROBLEMS, JSON.stringify(problems));
+  
+  // Update cache
+  problemsCache = problems;
+  localStorage.setItem(STORAGE_KEYS.PROBLEMS_CACHE, JSON.stringify(problems));
+}
+
+// Download problems as JSON file
+export function downloadProblemsJSON(): void {
+  const problems = getProblems();
+  const json = JSON.stringify(problems, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'problems.json';
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 export function addProblem(problem: Problem): void {
-  const problems = getProblems();
+  const problems = [...getProblems()]; // Create a copy
   const existingIndex = problems.findIndex(p => p.slug === problem.slug);
   
   if (existingIndex >= 0) {
@@ -64,7 +148,7 @@ export function getProblemBySlug(slug: string): Problem | undefined {
 }
 
 export function markProblemSolved(slug: string, solved: boolean): void {
-  const problems = getProblems();
+  const problems = [...getProblems()]; // Create a copy
   const problem = problems.find(p => p.slug === slug);
   if (problem) {
     problem.solved = solved;
@@ -121,7 +205,14 @@ export function getSettings(): Settings {
   if (!stored) return defaultSettings;
   
   try {
-    return { ...defaultSettings, ...JSON.parse(stored) } as Settings;
+    const parsed = JSON.parse(stored) as any;
+    // Migrate old 'dark'/'light' theme values to 'default'
+    if (parsed.theme === 'dark' || parsed.theme === 'light') {
+      parsed.theme = 'default';
+      // Save migrated settings
+      saveSettings(parsed);
+    }
+    return { ...defaultSettings, ...parsed } as Settings;
   } catch {
     return defaultSettings;
   }
@@ -154,7 +245,7 @@ export function importProblems(jsonString: string): { success: boolean; count: n
       return { success: false, count: 0, error: 'Invalid format: expected an array' };
     }
     
-    const problems = getProblems();
+    const problems = [...getProblems()]; // Create a copy
     let addedCount = 0;
     
     for (const problem of imported) {
@@ -176,5 +267,12 @@ export function importProblems(jsonString: string): { success: boolean; count: n
   } catch (e) {
     return { success: false, count: 0, error: 'Invalid JSON format' };
   }
+}
+
+// Reload problems from JSON file (useful after manual file edit)
+export async function reloadProblems(): Promise<void> {
+  problemsCache = null;
+  problemsLoadPromise = null;
+  await loadProblems();
 }
 

@@ -4,9 +4,9 @@ import { ChevronLeft, ChevronRight, RotateCcw, Settings } from 'lucide-react';
 import { ProblemDescription } from '../components/ProblemDescription';
 import { CodeEditor } from '../components/CodeEditor';
 import { TestCases } from '../components/TestCases';
-import { getProblemBySlug, getSolution, saveSolution, getProblems, markProblemSolved } from '../lib/storage';
+import { getProblemBySlug, getSolution, saveSolution, getProblems, markProblemSolved, loadProblems } from '../lib/storage';
 import { runAllTestCases, isPyodideLoaded, initPyodide, ExecutionResult } from '../lib/pyodide';
-import { Problem, TestCase } from '../data/problems';
+import { TestCase } from '../data/problems';
 
 export const Route = createFileRoute('/problem/$slug')({
   component: ProblemPage,
@@ -146,7 +146,14 @@ function ProblemPage() {
   }, [problem.starterCode]);
 
   // Navigation to prev/next problem
-  const problems = getProblems();
+  const [problems, setProblems] = useState(getProblems());
+  
+  useEffect(() => {
+    loadProblems().then(setProblems).catch(() => {
+      setProblems(getProblems());
+    });
+  }, []);
+  
   const currentIndex = problems.findIndex(p => p.slug === problem.slug);
   const prevProblem = currentIndex > 0 ? problems[currentIndex - 1] : null;
   const nextProblem = currentIndex < problems.length - 1 ? problems[currentIndex + 1] : null;

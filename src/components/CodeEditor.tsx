@@ -6,6 +6,7 @@ import { vim } from '@replit/codemirror-vim';
 import { EditorView } from '@codemirror/view';
 import { Extension } from '@codemirror/state';
 import { Settings, getSettings } from '../lib/storage';
+import { getTheme } from '../lib/themes';
 
 interface CodeEditorProps {
   value: string;
@@ -24,11 +25,22 @@ export function CodeEditor({ value, onChange, className = '' }: CodeEditorProps)
       setSettings(getSettings());
     };
 
+    // Also listen for theme changes in same tab
+    const handleThemeChange = () => {
+      setSettings(getSettings());
+    };
+
     window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener('theme-changed', handleThemeChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('theme-changed', handleThemeChange);
+    };
   }, []);
 
   const extensions = useMemo<Extension[]>(() => {
+    const theme = settings ? getTheme(settings.theme) : getTheme('default');
+    
     const exts: Extension[] = [
       python(),
       EditorView.lineWrapping,
@@ -40,14 +52,14 @@ export function CodeEditor({ value, onChange, className = '' }: CodeEditorProps)
           fontFamily: '"Menlo", "Monaco", "Consolas", "Courier New", monospace',
         },
         '.cm-gutters': {
-          backgroundColor: '#1a1a1a',
-          borderRight: '1px solid #3c3c3c',
+          backgroundColor: theme.colors['lc-fill-2'],
+          borderRight: `1px solid ${theme.colors['lc-border']}`,
         },
         '.cm-activeLineGutter': {
-          backgroundColor: '#282828',
+          backgroundColor: theme.colors['lc-fill-3'],
         },
         '.cm-activeLine': {
-          backgroundColor: '#282828',
+          backgroundColor: theme.colors['lc-fill-3'],
         },
       }),
     ];
@@ -58,7 +70,7 @@ export function CodeEditor({ value, onChange, className = '' }: CodeEditorProps)
     }
 
     return exts;
-  }, [settings?.editorMode, settings?.fontSize]);
+  }, [settings?.editorMode, settings?.fontSize, settings?.theme]);
 
   if (!settings) {
     return (

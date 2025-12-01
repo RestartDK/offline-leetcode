@@ -3,8 +3,6 @@
 import { Problem, Difficulty } from '../data/problems';
 import { addProblem } from './storage';
 
-const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
-
 interface LeetCodeGraphQLResponse {
   data: {
     question: {
@@ -70,9 +68,39 @@ async function fetchProblemFromAPI(slug: string): Promise<LeetCodeGraphQLRespons
     variables: { titleSlug: slug },
   });
 
+  const leetcodeUrl = 'https://leetcode.com/graphql';
+
+  // Strategy 1: Try direct request with proper headers (sometimes works)
   try {
-    // Try direct API call first
-    let response = await fetch('https://leetcode.com/graphql', {
+    const response = await fetch(leetcodeUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Referer': 'https://leetcode.com',
+        'Origin': 'https://leetcode.com',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+      },
+      body,
+    });
+
+    if (response.ok) {
+      const data: LeetCodeGraphQLResponse = await response.json();
+      if (data?.data?.question) {
+        console.log('Successfully fetched directly from LeetCode GraphQL');
+        return data.data.question;
+      }
+    }
+  } catch (error) {
+    console.log('Direct request failed (CORS), trying proxies...', error);
+  }
+
+  // Strategy 2: Use CORS proxy with POST support
+  // Try corsproxy.io which properly handles POST requests
+  try {
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(leetcodeUrl)}`;
+    console.log('Trying corsproxy.io...');
+    
+    const response = await fetch(proxyUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -80,27 +108,53 @@ async function fetchProblemFromAPI(slug: string): Promise<LeetCodeGraphQLRespons
       body,
     });
 
-    if (!response.ok) {
-      // Try with CORS proxy
-      response = await fetch(CORS_PROXY + encodeURIComponent('https://leetcode.com/graphql'), {
+    if (response.ok) {
+      const data: LeetCodeGraphQLResponse = await response.json();
+      if (data?.data?.question) {
+        console.log('Successfully fetched via corsproxy.io');
+        return data.data.question;
+      }
+    }
+  } catch (error) {
+    console.log('corsproxy.io failed:', error);
+  }
+
+  // Strategy 3: Use allorigins.win POST endpoint
+  try {
+    // allorigins.win POST endpoint expects the request body in the request
+    const proxyUrl = 'https://api.allorigins.win/post';
+    console.log('Trying allorigins.win POST...');
+    
+    const response = await fetch(proxyUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        url: leetcodeUrl,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body,
-      });
-    }
+        body: body,
+      }),
+    });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`);
+    if (response.ok) {
+      const proxyResponse = await response.json();
+      if (proxyResponse.contents) {
+        const data: LeetCodeGraphQLResponse = JSON.parse(proxyResponse.contents);
+        if (data?.data?.question) {
+          console.log('Successfully fetched via allorigins.win');
+          return data.data.question;
+        }
+      }
     }
-
-    const data: LeetCodeGraphQLResponse = await response.json();
-    return data.data.question;
   } catch (error) {
-    console.error('Failed to fetch from API:', error);
-    return null;
+    console.log('allorigins.win POST failed:', error);
   }
+
+  return null;
 }
 
 // Parse examples from HTML content
@@ -235,7 +289,7 @@ export async function scrapeProblem(url: string): Promise<{
     if (!question) {
       return {
         success: false,
-        error: 'Failed to fetch problem data. The problem may not exist or there might be a network issue.',
+        error: 'Failed to fetch problem from LeetCode GraphQL API. This could be due to:\n• CORS restrictions (browser blocking cross-origin requests)\n• The problem doesn\'t exist\n• Network connectivity issues\n• All CORS proxies are blocked or rate-limited\n\nTry using JSON import instead, or check the browser console for more details.',
       };
     }
 

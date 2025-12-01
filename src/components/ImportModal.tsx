@@ -153,6 +153,15 @@ export function ImportModal({ isOpen, onClose, onImportSuccess }: ImportModalPro
         <div className="p-4">
           {method === 'url' ? (
             <div className="space-y-4">
+              {/* CORS Warning */}
+              <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg">
+                <p className="text-sm text-amber-400">
+                  <strong>Note:</strong> This attempts to fetch directly from LeetCode's GraphQL API. 
+                  If CORS blocks the request, it will try CORS proxies as fallback. 
+                  If it still doesn't work, use the <strong>From JSON</strong> tab instead.
+                </p>
+              </div>
+
               <div>
                 <label className="block text-sm text-gray-400 mb-2">
                   LeetCode Problem URL
@@ -165,7 +174,7 @@ export function ImportModal({ isOpen, onClose, onImportSuccess }: ImportModalPro
                   className="w-full px-3 py-2 bg-lc-fill-3 border border-lc-border rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:border-lc-accent"
                 />
                 <p className="mt-2 text-xs text-gray-500">
-                  Paste a LeetCode problem URL to import it. Note: This requires an internet connection and may not work if LeetCode blocks the request.
+                  Paste a LeetCode problem URL to import it. Requires an internet connection.
                 </p>
               </div>
 
@@ -236,7 +245,7 @@ export function ImportModal({ isOpen, onClose, onImportSuccess }: ImportModalPro
                 <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
               )}
               <div>
-                <p className={result.success ? 'text-emerald-400' : 'text-red-400'}>
+                <p className={`whitespace-pre-line ${result.success ? 'text-emerald-400' : 'text-red-400'}`}>
                   {result.message}
                 </p>
                 {result.problem && (
