@@ -1,0 +1,318 @@
+@import "tailwindcss";
+
+/* LeetCode Dark Theme Colors */
+:root {
+  --lc-bg-1: #1a1a1a;
+  --lc-bg-2: #282828;
+  --lc-bg-3: #333333;
+  --lc-fill-1: #0a0a0a;
+  --lc-fill-2: #1a1a1a;
+  --lc-fill-3: #282828;
+  --lc-fill-4: #3c3c3c;
+  --lc-border: #3c3c3c;
+  --lc-accent: #ffa116;
+  --lc-accent-hover: #ffb84d;
+  --lc-text-1: #eff1f6;
+  --lc-text-2: #b3b3b3;
+  --lc-text-3: #8a8a8a;
+  --lc-easy: #00b8a3;
+  --lc-medium: #ffc01e;
+  --lc-hard: #ff375f;
+}
+
+@theme {
+  --color-lc-bg-1: var(--lc-bg-1);
+  --color-lc-bg-2: var(--lc-bg-2);
+  --color-lc-bg-3: var(--lc-bg-3);
+  --color-lc-fill-1: var(--lc-fill-1);
+  --color-lc-fill-2: var(--lc-fill-2);
+  --color-lc-fill-3: var(--lc-fill-3);
+  --color-lc-fill-4: var(--lc-fill-4);
+  --color-lc-border: var(--lc-border);
+  --color-lc-accent: var(--lc-accent);
+  --color-lc-accent-hover: var(--lc-accent-hover);
+  --color-lc-text-1: var(--lc-text-1);
+  --color-lc-text-2: var(--lc-text-2);
+  --color-lc-text-3: var(--lc-text-3);
+  --color-lc-easy: var(--lc-easy);
+  --color-lc-medium: var(--lc-medium);
+  --color-lc-hard: var(--lc-hard);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  @apply bg-lc-fill-1;
+}
+
+body {
+  @apply m-0 bg-lc-fill-1 text-gray-200;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: "Menlo", "Monaco", "Consolas", "Courier New", monospace;
+  @apply bg-lc-fill-3 px-1.5 py-0.5 rounded text-sm text-amber-400;
+}
+
+pre {
+  @apply bg-lc-fill-3 p-4 rounded-lg overflow-x-auto text-sm;
+}
+
+pre code {
+  @apply bg-transparent p-0;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-lc-fill-2;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-lc-fill-4 rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500;
+}
+
+/* Selection color */
+::selection {
+  @apply bg-lc-accent/30;
+}
+
+/* Focus styles */
+:focus-visible {
+  @apply outline-none ring-2 ring-lc-accent ring-offset-2 ring-offset-lc-fill-1;
+}
+
+/* Link styles */
+a {
+  @apply text-lc-accent hover:text-lc-accent-hover transition-colors;
+}
+
+/* Button styles */
+.btn {
+  @apply px-4 py-2 rounded-lg font-medium transition-all duration-200;
+}
+
+.btn-primary {
+  @apply bg-lc-accent text-black hover:bg-lc-accent-hover;
+}
+
+.btn-secondary {
+  @apply bg-lc-fill-3 text-gray-200 hover:bg-lc-fill-4 border border-lc-border;
+}
+
+.btn-success {
+  @apply bg-emerald-600 text-white hover:bg-emerald-500;
+}
+
+.btn-danger {
+  @apply bg-red-600 text-white hover:bg-red-500;
+}
+
+/* Input styles */
+input, select, textarea {
+  @apply bg-lc-fill-3 border border-lc-border text-gray-200;
+}
+
+input:focus, select:focus, textarea:focus {
+  @apply outline-none border-lc-accent ring-1 ring-lc-accent;
+}
+
+/* Tab styles */
+.tab {
+  @apply px-4 py-2 text-sm font-medium text-gray-400 border-b-2 border-transparent hover:text-gray-200 transition-colors cursor-pointer;
+}
+
+.tab.active {
+  @apply text-white border-lc-accent;
+}
+
+/* Split panel styles */
+.split-panel {
+  @apply flex h-full;
+}
+
+.split-panel > .panel {
+  @apply flex-1 overflow-hidden;
+}
+
+.split-panel > .divider {
+  @apply w-1 bg-lc-border cursor-col-resize hover:bg-lc-accent transition-colors;
+}
+
+/* CodeMirror customizations */
+.cm-editor {
+  height: 100% !important;
+  font-size: 14px !important;
+}
+
+.cm-editor .cm-scroller {
+  font-family: "Menlo", "Monaco", "Consolas", "Courier New", monospace !important;
+}
+
+.cm-editor .cm-gutters {
+  @apply bg-lc-fill-2 border-r border-lc-border;
+}
+
+.cm-editor .cm-activeLineGutter {
+  @apply bg-lc-fill-3;
+}
+
+.cm-editor .cm-line {
+  padding-left: 4px;
+}
+
+/* Problem description styles */
+.problem-description {
+  @apply text-gray-200 leading-relaxed;
+}
+
+.problem-description p {
+  @apply mb-4;
+}
+
+.problem-description ul, .problem-description ol {
+  @apply mb-4 pl-6;
+}
+
+.problem-description li {
+  @apply mb-2;
+}
+
+.problem-description strong {
+  @apply font-semibold text-white;
+}
+
+.problem-description em {
+  @apply italic text-gray-300;
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Animation utility classes */
+@utility animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@utility animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@utility animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Status indicator */
+.status-dot {
+  @apply w-2 h-2 rounded-full;
+}
+
+.status-dot.loading {
+  @apply bg-yellow-500 animate-pulse;
+}
+
+.status-dot.success {
+  @apply bg-emerald-500;
+}
+
+.status-dot.error {
+  @apply bg-red-500;
+}
+
+/* Modal overlay */
+.modal-overlay {
+  @apply fixed inset-0 bg-black/70 flex items-center justify-center z-50;
+}
+
+.modal-content {
+  @apply bg-lc-fill-2 rounded-lg border border-lc-border shadow-2xl max-w-lg w-full mx-4 animate-fade-in;
+}
+
+/* Toast notifications */
+.toast {
+  @apply fixed bottom-4 right-4 px-4 py-3 rounded-lg shadow-lg animate-fade-in z-50;
+}
+
+.toast.success {
+  @apply bg-emerald-600 text-white;
+}
+
+.toast.error {
+  @apply bg-red-600 text-white;
+}
+
+.toast.info {
+  @apply bg-blue-600 text-white;
+}
+
+/* Resizable panels */
+.resizable-panel {
+  @apply relative;
+}
+
+.resize-handle {
+  @apply absolute w-1 h-full right-0 top-0 cursor-col-resize bg-transparent hover:bg-lc-accent transition-colors z-10;
+}
+
+.resize-handle:active {
+  @apply bg-lc-accent;
+}
+
+/* Test result styles */
+.test-result {
+  @apply p-3 rounded-lg mb-2;
+}
+
+.test-result.passed {
+  @apply bg-emerald-500/10 border border-emerald-500/30;
+}
+
+.test-result.failed {
+  @apply bg-red-500/10 border border-red-500/30;
+}
+
+.test-result.error {
+  @apply bg-amber-500/10 border border-amber-500/30;
+}
