@@ -1,0 +1,459 @@
+[
+  {
+    "id": 1,
+    "slug": "two-sum",
+    "title": "Two Sum",
+    "difficulty": "Easy",
+    "description": "<p>Given an array of integers <code>nums</code> and an integer <code>target</code>, return <em>indices of the two numbers such that they add up to <code>target</code></em>.</p>\n\n<p>You may assume that each input would have <strong>exactly one solution</strong>, and you may not use the <em>same</em> element twice.</p>\n\n<p>You can return the answer in any order.</p>",
+    "examples": [
+      {
+        "input": "nums = [2,7,11,15], target = 9",
+        "output": "[0,1]",
+        "explanation": "Because nums[0] + nums[1] == 9, we return [0, 1]."
+      },
+      {
+        "input": "nums = [3,2,4], target = 6",
+        "output": "[1,2]"
+      },
+      {
+        "input": "nums = [3,3], target = 6",
+        "output": "[0,1]"
+      }
+    ],
+    "constraints": [
+      "2 <= nums.length <= 10<sup>4</sup>",
+      "-10<sup>9</sup> <= nums[i] <= 10<sup>9</sup>",
+      "-10<sup>9</sup> <= target <= 10<sup>9</sup>",
+      "Only one valid answer exists."
+    ],
+    "starterCode": "class Solution:\n    def twoSum(self, nums: list[int], target: int) -> list[int]:\n        # Write your solution here\n        pass",
+    "testCases": [
+      {
+        "input": "[[2,7,11,15], 9]",
+        "expected": "[0, 1]"
+      },
+      {
+        "input": "[[3,2,4], 6]",
+        "expected": "[1, 2]"
+      },
+      {
+        "input": "[[3,3], 6]",
+        "expected": "[0, 1]"
+      }
+    ],
+    "tags": [
+      "Array",
+      "Hash Table"
+    ],
+    "acceptance": 52.4
+  },
+  {
+    "id": 9,
+    "slug": "palindrome-number",
+    "title": "Palindrome Number",
+    "difficulty": "Easy",
+    "description": "<p>Given an integer <code>x</code>, return <code>true</code> if <code>x</code> is a <strong>palindrome</strong>, and <code>false</code> otherwise.</p>",
+    "examples": [
+      {
+        "input": "x = 121",
+        "output": "true",
+        "explanation": "121 reads as 121 from left to right and from right to left."
+      },
+      {
+        "input": "x = -121",
+        "output": "false",
+        "explanation": "From left to right, it reads -121. From right to left, it becomes 121-. Therefore it is not a palindrome."
+      },
+      {
+        "input": "x = 10",
+        "output": "false",
+        "explanation": "Reads 01 from right to left. Therefore it is not a palindrome."
+      }
+    ],
+    "constraints": [
+      "-2<sup>31</sup> <= x <= 2<sup>31</sup> - 1"
+    ],
+    "starterCode": "class Solution:\n    def isPalindrome(self, x: int) -> bool:\n        # Write your solution here\n        pass",
+    "testCases": [
+      {
+        "input": "[121]",
+        "expected": "True"
+      },
+      {
+        "input": "[-121]",
+        "expected": "False"
+      },
+      {
+        "input": "[10]",
+        "expected": "False"
+      }
+    ],
+    "tags": [
+      "Math"
+    ],
+    "acceptance": 54.2
+  },
+  {
+    "id": 13,
+    "slug": "roman-to-integer",
+    "title": "Roman to Integer",
+    "difficulty": "Easy",
+    "description": "<p>Roman numerals are represented by seven different symbols: <code>I</code>, <code>V</code>, <code>X</code>, <code>L</code>, <code>C</code>, <code>D</code> and <code>M</code>.</p>\n\n<pre>\nSymbol       Value\nI             1\nV             5\nX             10\nL             50\nC             100\nD             500\nM             1000\n</pre>\n\n<p>For example, <code>2</code> is written as <code>II</code> in Roman numeral, just two ones added together. <code>12</code> is written as <code>XII</code>, which is simply <code>X + II</code>. The number <code>27</code> is written as <code>XXVII</code>, which is <code>XX + V + II</code>.</p>\n\n<p>Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not <code>IIII</code>. Instead, the number four is written as <code>IV</code>. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as <code>IX</code>. There are six instances where subtraction is used:</p>\n\n<ul>\n  <li><code>I</code> can be placed before <code>V</code> (5) and <code>X</code> (10) to make 4 and 9.</li>\n  <li><code>X</code> can be placed before <code>L</code> (50) and <code>C</code> (100) to make 40 and 90.</li>\n  <li><code>C</code> can be placed before <code>D</code> (500) and <code>M</code> (1000) to make 400 and 900.</li>\n</ul>\n\n<p>Given a roman numeral, convert it to an integer.</p>",
+    "examples": [
+      {
+        "input": "s = \"III\"",
+        "output": "3",
+        "explanation": "III = 3."
+      },
+      {
+        "input": "s = \"LVIII\"",
+        "output": "58",
+        "explanation": "L = 50, V= 5, III = 3."
+      },
+      {
+        "input": "s = \"MCMXCIV\"",
+        "output": "1994",
+        "explanation": "M = 1000, CM = 900, XC = 90 and IV = 4."
+      }
+    ],
+    "constraints": [
+      "1 <= s.length <= 15",
+      "s contains only the characters ('I', 'V', 'X', 'L', 'C', 'D', 'M').",
+      "It is guaranteed that s is a valid roman numeral in the range [1, 3999]."
+    ],
+    "starterCode": "class Solution:\n    def romanToInt(self, s: str) -> int:\n        # Write your solution here\n        pass",
+    "testCases": [
+      {
+        "input": "[\"III\"]",
+        "expected": "3"
+      },
+      {
+        "input": "[\"LVIII\"]",
+        "expected": "58"
+      },
+      {
+        "input": "[\"MCMXCIV\"]",
+        "expected": "1994"
+      }
+    ],
+    "tags": [
+      "Hash Table",
+      "Math",
+      "String"
+    ],
+    "acceptance": 59.1
+  },
+  {
+    "id": 20,
+    "slug": "valid-parentheses",
+    "title": "Valid Parentheses",
+    "difficulty": "Easy",
+    "description": "<p>Given a string <code>s</code> containing just the characters <code>'('</code>, <code>')'</code>, <code>'{'</code>, <code>'}'</code>, <code>'['</code> and <code>']'</code>, determine if the input string is valid.</p>\n\n<p>An input string is valid if:</p>\n\n<ol>\n  <li>Open brackets must be closed by the same type of brackets.</li>\n  <li>Open brackets must be closed in the correct order.</li>\n  <li>Every close bracket has a corresponding open bracket of the same type.</li>\n</ol>",
+    "examples": [
+      {
+        "input": "s = \"()\"",
+        "output": "true"
+      },
+      {
+        "input": "s = \"()[]{}\"",
+        "output": "true"
+      },
+      {
+        "input": "s = \"(]\"",
+        "output": "false"
+      }
+    ],
+    "constraints": [
+      "1 <= s.length <= 10<sup>4</sup>",
+      "s consists of parentheses only '()[]{}'."
+    ],
+    "starterCode": "class Solution:\n    def isValid(self, s: str) -> bool:\n        # Write your solution here\n        pass",
+    "testCases": [
+      {
+        "input": "[\"()\"]",
+        "expected": "True"
+      },
+      {
+        "input": "[\"()[]{}\"]",
+        "expected": "True"
+      },
+      {
+        "input": "[\"(]\"]",
+        "expected": "False"
+      }
+    ],
+    "tags": [
+      "String",
+      "Stack"
+    ],
+    "acceptance": 40.1
+  },
+  {
+    "id": 21,
+    "slug": "merge-two-sorted-lists",
+    "title": "Merge Two Sorted Lists",
+    "difficulty": "Easy",
+    "description": "<p>You are given the heads of two sorted linked lists <code>list1</code> and <code>list2</code>.</p>\n\n<p>Merge the two lists into one <strong>sorted</strong> list. The list should be made by splicing together the nodes of the first two lists.</p>\n\n<p>Return <em>the head of the merged linked list</em>.</p>",
+    "examples": [
+      {
+        "input": "list1 = [1,2,4], list2 = [1,3,4]",
+        "output": "[1,1,2,3,4,4]"
+      },
+      {
+        "input": "list1 = [], list2 = []",
+        "output": "[]"
+      },
+      {
+        "input": "list1 = [], list2 = [0]",
+        "output": "[0]"
+      }
+    ],
+    "constraints": [
+      "The number of nodes in both lists is in the range [0, 50].",
+      "-100 <= Node.val <= 100",
+      "Both list1 and list2 are sorted in non-decreasing order."
+    ],
+    "starterCode": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\n\nclass Solution:\n    def mergeTwoLists(self, list1: ListNode, list2: ListNode) -> ListNode:\n        # Write your solution here\n        pass",
+    "testCases": [
+      {
+        "input": "[[1,2,4], [1,3,4]]",
+        "expected": "[1, 1, 2, 3, 4, 4]"
+      },
+      {
+        "input": "[[], []]",
+        "expected": "[]"
+      },
+      {
+        "input": "[[], [0]]",
+        "expected": "[0]"
+      }
+    ],
+    "tags": [
+      "Linked List",
+      "Recursion"
+    ],
+    "acceptance": 62.5
+  },
+  {
+    "id": 53,
+    "slug": "maximum-subarray",
+    "title": "Maximum Subarray",
+    "difficulty": "Medium",
+    "description": "<p>Given an integer array <code>nums</code>, find the <strong>subarray</strong> with the largest sum, and return <em>its sum</em>.</p>",
+    "examples": [
+      {
+        "input": "nums = [-2,1,-3,4,-1,2,1,-5,4]",
+        "output": "6",
+        "explanation": "The subarray [4,-1,2,1] has the largest sum 6."
+      },
+      {
+        "input": "nums = [1]",
+        "output": "1",
+        "explanation": "The subarray [1] has the largest sum 1."
+      },
+      {
+        "input": "nums = [5,4,-1,7,8]",
+        "output": "23",
+        "explanation": "The subarray [5,4,-1,7,8] has the largest sum 23."
+      }
+    ],
+    "constraints": [
+      "1 <= nums.length <= 10<sup>5</sup>",
+      "-10<sup>4</sup> <= nums[i] <= 10<sup>4</sup>"
+    ],
+    "starterCode": "class Solution:\n    def maxSubArray(self, nums: list[int]) -> int:\n        # Write your solution here\n        pass",
+    "testCases": [
+      {
+        "input": "[[-2,1,-3,4,-1,2,1,-5,4]]",
+        "expected": "6"
+      },
+      {
+        "input": "[[1]]",
+        "expected": "1"
+      },
+      {
+        "input": "[[5,4,-1,7,8]]",
+        "expected": "23"
+      }
+    ],
+    "tags": [
+      "Array",
+      "Divide and Conquer",
+      "Dynamic Programming"
+    ],
+    "acceptance": 50.2
+  },
+  {
+    "id": 70,
+    "slug": "climbing-stairs",
+    "title": "Climbing Stairs",
+    "difficulty": "Easy",
+    "description": "<p>You are climbing a staircase. It takes <code>n</code> steps to reach the top.</p>\n\n<p>Each time you can either climb <code>1</code> or <code>2</code> steps. In how many distinct ways can you climb to the top?</p>",
+    "examples": [
+      {
+        "input": "n = 2",
+        "output": "2",
+        "explanation": "There are two ways to climb to the top.\n1. 1 step + 1 step\n2. 2 steps"
+      },
+      {
+        "input": "n = 3",
+        "output": "3",
+        "explanation": "There are three ways to climb to the top.\n1. 1 step + 1 step + 1 step\n2. 1 step + 2 steps\n3. 2 steps + 1 step"
+      }
+    ],
+    "constraints": [
+      "1 <= n <= 45"
+    ],
+    "starterCode": "class Solution:\n    def climbStairs(self, n: int) -> int:\n        # Write your solution here\n        pass",
+    "testCases": [
+      {
+        "input": "[2]",
+        "expected": "2"
+      },
+      {
+        "input": "[3]",
+        "expected": "3"
+      },
+      {
+        "input": "[4]",
+        "expected": "5"
+      }
+    ],
+    "tags": [
+      "Math",
+      "Dynamic Programming",
+      "Memoization"
+    ],
+    "acceptance": 52.8
+  },
+  {
+    "id": 121,
+    "slug": "best-time-to-buy-and-sell-stock",
+    "title": "Best Time to Buy and Sell Stock",
+    "difficulty": "Easy",
+    "description": "<p>You are given an array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the <code>i<sup>th</sup></code> day.</p>\n\n<p>You want to maximize your profit by choosing a <strong>single day</strong> to buy one stock and choosing a <strong>different day in the future</strong> to sell that stock.</p>\n\n<p>Return <em>the maximum profit you can achieve from this transaction</em>. If you cannot achieve any profit, return <code>0</code>.</p>",
+    "examples": [
+      {
+        "input": "prices = [7,1,5,3,6,4]",
+        "output": "5",
+        "explanation": "Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.\nNote that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell."
+      },
+      {
+        "input": "prices = [7,6,4,3,1]",
+        "output": "0",
+        "explanation": "In this case, no transactions are done and the max profit = 0."
+      }
+    ],
+    "constraints": [
+      "1 <= prices.length <= 10<sup>5</sup>",
+      "0 <= prices[i] <= 10<sup>4</sup>"
+    ],
+    "starterCode": "class Solution:\n    def maxProfit(self, prices: list[int]) -> int:\n        # Write your solution here\n        pass",
+    "testCases": [
+      {
+        "input": "[[7,1,5,3,6,4]]",
+        "expected": "5"
+      },
+      {
+        "input": "[[7,6,4,3,1]]",
+        "expected": "0"
+      }
+    ],
+    "tags": [
+      "Array",
+      "Dynamic Programming"
+    ],
+    "acceptance": 54.3
+  },
+  {
+    "id": 3,
+    "slug": "longest-substring-without-repeating-characters",
+    "title": "Longest Substring Without Repeating Characters",
+    "difficulty": "Medium",
+    "description": "<p>Given a string <code>s</code>, find the length of the <strong>longest substring</strong> without repeating characters.</p>",
+    "examples": [
+      {
+        "input": "s = \"abcabcbb\"",
+        "output": "3",
+        "explanation": "The answer is \"abc\", with the length of 3."
+      },
+      {
+        "input": "s = \"bbbbb\"",
+        "output": "1",
+        "explanation": "The answer is \"b\", with the length of 1."
+      },
+      {
+        "input": "s = \"pwwkew\"",
+        "output": "3",
+        "explanation": "The answer is \"wke\", with the length of 3.\nNotice that the answer must be a substring, \"pwke\" is a subsequence and not a substring."
+      }
+    ],
+    "constraints": [
+      "0 <= s.length <= 5 * 10<sup>4</sup>",
+      "s consists of English letters, digits, symbols and spaces."
+    ],
+    "starterCode": "class Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        # Write your solution here\n        pass",
+    "testCases": [
+      {
+        "input": "[\"abcabcbb\"]",
+        "expected": "3"
+      },
+      {
+        "input": "[\"bbbbb\"]",
+        "expected": "1"
+      },
+      {
+        "input": "[\"pwwkew\"]",
+        "expected": "3"
+      }
+    ],
+    "tags": [
+      "Hash Table",
+      "String",
+      "Sliding Window"
+    ],
+    "acceptance": 34.5
+  },
+  {
+    "id": 42,
+    "slug": "trapping-rain-water",
+    "title": "Trapping Rain Water",
+    "difficulty": "Hard",
+    "description": "<p>Given <code>n</code> non-negative integers representing an elevation map where the width of each bar is <code>1</code>, compute how much water it can trap after raining.</p>",
+    "examples": [
+      {
+        "input": "height = [0,1,0,2,1,0,1,3,2,1,2,1]",
+        "output": "6",
+        "explanation": "The above elevation map (black section) is represented by array [0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rain water (blue section) are being trapped."
+      },
+      {
+        "input": "height = [4,2,0,3,2,5]",
+        "output": "9"
+      }
+    ],
+    "constraints": [
+      "n == height.length",
+      "1 <= n <= 2 * 10<sup>4</sup>",
+      "0 <= height[i] <= 10<sup>5</sup>"
+    ],
+    "starterCode": "class Solution:\n    def trap(self, height: list[int]) -> int:\n        # Write your solution here\n        pass",
+    "testCases": [
+      {
+        "input": "[[0,1,0,2,1,0,1,3,2,1,2,1]]",
+        "expected": "6"
+      },
+      {
+        "input": "[[4,2,0,3,2,5]]",
+        "expected": "9"
+      }
+    ],
+    "tags": [
+      "Array",
+      "Two Pointers",
+      "Dynamic Programming",
+      "Stack",
+      "Monotonic Stack"
+    ],
+    "acceptance": 60.1
+  }
+]
