@@ -455,5 +455,89 @@
       "Monotonic Stack"
     ],
     "acceptance": 60.1
+  },
+  {
+    "id": 162,
+    "slug": "find-peak-element",
+    "title": "Find Peak Element",
+    "difficulty": "Medium",
+    "description": "<p>A peak element is an element that is strictly greater than its neighbors.</p>\n\n<p>Given a <strong>0-indexed</strong> integer array <code>nums</code>, find a peak element, and return its index. If the array contains multiple peaks, return the index to <strong>any of the peaks</strong>.</p>\n\n<p>You may imagine that <code>nums[-1] = nums[n] = -&infin;</code>. In other words, an element is always considered to be strictly greater than a neighbor that is outside the array.</p>\n\n<p>You must write an algorithm that runs in <code>O(log n)</code> time.</p>\n\n<p>&nbsp;</p>\n<p><strong class=\"example\">Example 1:</strong></p>\n\n<pre>\n<strong>Input:</strong> nums = [1,2,3,1]\n<strong>Output:</strong> 2\n<strong>Explanation:</strong> 3 is a peak element and your function should return the index number 2.</pre>\n\n<p><strong class=\"example\">Example 2:</strong></p>\n\n<pre>\n<strong>Input:</strong> nums = [1,2,1,3,5,6,4]\n<strong>Output:</strong> 5\n<strong>Explanation:</strong> Your function can return either index number 1 where the peak element is 2, or index number 5 where the peak element is 6.</pre>\n\n<p>&nbsp;</p>\n<p><strong>Constraints:</strong></p>\n\n<ul>\n\t<li><code>1 &lt;= nums.length &lt;= 1000</code></li>\n\t<li><code>-2<sup>31</sup> &lt;= nums[i] &lt;= 2<sup>31</sup> - 1</code></li>\n\t<li><code>nums[i] != nums[i + 1]</code> for all valid <code>i</code>.</li>\n</ul>\n",
+    "examples": [
+      {
+        "input": "nums = [1,2,3,1]",
+        "output": "2",
+        "explanation": "3 is a peak element and your function should return the index number 2."
+      },
+      {
+        "input": "nums = [1,2,1,3,5,6,4]",
+        "output": "5",
+        "explanation": "Your function can return either index number 1 where the peak element is 2, or index number 5 where the peak element is 6."
+      }
+    ],
+    "constraints": [
+      "1 &lt;= nums.length &lt;= 1000",
+      "-231 &lt;= nums[i] &lt;= 231 - 1",
+      "nums[i] != nums[i + 1] for all valid i."
+    ],
+    "starterCode": "class Solution:\n    def findPeakElement(self, nums: List[int]) -> int:\n        ",
+    "testCases": [
+      {
+        "input": "[[1,2,3,1]]",
+        "expected": "2"
+      },
+      {
+        "input": "[[1,2,1,3,5,6,4]]",
+        "expected": "5"
+      }
+    ],
+    "tags": [
+      "Array",
+      "Binary Search"
+    ],
+    "acceptance": 67
+  },
+  {
+    "id": 2300,
+    "slug": "successful-pairs-of-spells-and-potions",
+    "title": "Successful Pairs of Spells and Potions",
+    "difficulty": "Medium",
+    "description": "<p>You are given two positive integer arrays <code>spells</code> and <code>potions</code>, of length <code>n</code> and <code>m</code> respectively, where <code>spells[i]</code> represents the strength of the <code>i<sup>th</sup></code> spell and <code>potions[j]</code> represents the strength of the <code>j<sup>th</sup></code> potion.</p>\n\n<p>You are also given an integer <code>success</code>. A spell and potion pair is considered <strong>successful</strong> if the <strong>product</strong> of their strengths is <strong>at least</strong> <code>success</code>.</p>\n\n<p>Return <em>an integer array </em><code>pairs</code><em> of length </em><code>n</code><em> where </em><code>pairs[i]</code><em> is the number of <strong>potions</strong> that will form a successful pair with the </em><code>i<sup>th</sup></code><em> spell.</em></p>\n\n<p>&nbsp;</p>\n<p><strong class=\"example\">Example 1:</strong></p>\n\n<pre>\n<strong>Input:</strong> spells = [5,1,3], potions = [1,2,3,4,5], success = 7\n<strong>Output:</strong> [4,0,3]\n<strong>Explanation:</strong>\n- 0<sup>th</sup> spell: 5 * [1,2,3,4,5] = [5,<u><strong>10</strong></u>,<u><strong>15</strong></u>,<u><strong>20</strong></u>,<u><strong>25</strong></u>]. 4 pairs are successful.\n- 1<sup>st</sup> spell: 1 * [1,2,3,4,5] = [1,2,3,4,5]. 0 pairs are successful.\n- 2<sup>nd</sup> spell: 3 * [1,2,3,4,5] = [3,6,<u><strong>9</strong></u>,<u><strong>12</strong></u>,<u><strong>15</strong></u>]. 3 pairs are successful.\nThus, [4,0,3] is returned.\n</pre>\n\n<p><strong class=\"example\">Example 2:</strong></p>\n\n<pre>\n<strong>Input:</strong> spells = [3,1,2], potions = [8,5,8], success = 16\n<strong>Output:</strong> [2,0,2]\n<strong>Explanation:</strong>\n- 0<sup>th</sup> spell: 3 * [8,5,8] = [<u><strong>24</strong></u>,15,<u><strong>24</strong></u>]. 2 pairs are successful.\n- 1<sup>st</sup> spell: 1 * [8,5,8] = [8,5,8]. 0 pairs are successful. \n- 2<sup>nd</sup> spell: 2 * [8,5,8] = [<strong><u>16</u></strong>,10,<u><strong>16</strong></u>]. 2 pairs are successful. \nThus, [2,0,2] is returned.\n</pre>\n\n<p>&nbsp;</p>\n<p><strong>Constraints:</strong></p>\n\n<ul>\n\t<li><code>n == spells.length</code></li>\n\t<li><code>m == potions.length</code></li>\n\t<li><code>1 &lt;= n, m &lt;= 10<sup>5</sup></code></li>\n\t<li><code>1 &lt;= spells[i], potions[i] &lt;= 10<sup>5</sup></code></li>\n\t<li><code>1 &lt;= success &lt;= 10<sup>10</sup></code></li>\n</ul>\n",
+    "examples": [
+      {
+        "input": "spells = [5,1,3], potions = [1,2,3,4,5], success = 7",
+        "output": "[4,0,3]",
+        "explanation": "- 0th spell: 5 * [1,2,3,4,5] = [5,10,15,20,25]. 4 pairs are successful.\n- 1st spell: 1 * [1,2,3,4,5] = [1,2,3,4,5]. 0 pairs are successful.\n- 2nd spell: 3 * [1,2,3,4,5] = [3,6,9,12,15]. 3 pairs are successful.\nThus, [4,0,3] is returned."
+      },
+      {
+        "input": "spells = [3,1,2], potions = [8,5,8], success = 16",
+        "output": "[2,0,2]",
+        "explanation": "- 0th spell: 3 * [8,5,8] = [24,15,24]. 2 pairs are successful.\n- 1st spell: 1 * [8,5,8] = [8,5,8]. 0 pairs are successful. \n- 2nd spell: 2 * [8,5,8] = [16,10,16]. 2 pairs are successful. \nThus, [2,0,2] is returned."
+      }
+    ],
+    "constraints": [
+      "n == spells.length",
+      "m == potions.length",
+      "1 &lt;= n, m &lt;= 105",
+      "1 &lt;= spells[i], potions[i] &lt;= 105",
+      "1 &lt;= success &lt;= 1010"
+    ],
+    "starterCode": "class Solution:\n    def successfulPairs(self, spells: List[int], potions: List[int], success: int) -> List[int]:\n        ",
+    "testCases": [
+      {
+        "input": "[[5,1,3], potions]",
+        "expected": "[4,0,3]"
+      },
+      {
+        "input": "[[3,1,2], potions]",
+        "expected": "[2,0,2]"
+      }
+    ],
+    "tags": [
+      "Array",
+      "Two Pointers",
+      "Binary Search",
+      "Sorting"
+    ],
+    "acceptance": 61
   }
 ]
